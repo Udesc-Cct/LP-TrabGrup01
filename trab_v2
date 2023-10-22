@@ -1,0 +1,289 @@
+#include <stdio.h>
+#include <conio.h>
+#include <unistd.h>
+
+#define MAXLIN 8
+#define MAXCOL 10
+
+int contador = 0;
+int i,j;
+
+void clearScreen();
+void MostarMatriz(int pMatriz[MAXLIN][MAXCOL]);
+void preencherComZeros(int matriz[MAXLIN][MAXCOL], int linhas, int colunas);
+int buscarValor(int pMatriz[MAXLIN][MAXCOL], int valor);
+void criarNovoConjunto(int pMatriz[MAXLIN][MAXCOL]);
+void inserirDadosConjunto(int pMatriz[MAXLIN][MAXCOL]);
+void removerConjunto(int pMatriz[MAXLIN][MAXCOL]);
+void uniaoConjuntos(int pMatriz[MAXLIN][MAXCOL]);
+
+int main()
+{
+    int matriz[MAXLIN][MAXCOL] = {0}; // Inicializar matriz com zeros
+    preencherComZeros(matriz, MAXLIN, MAXCOL);
+    int opcao;
+    do
+    {
+        clearScreen();
+        MostarMatriz(matriz);
+        printf("\n");
+        printf("---------- MENU ----------\n");
+        printf("1. Criar conjunto\n");
+        printf("2. Inserir dados em um conjunto\n");
+        printf("3. Remover um conjunto\n");
+        printf("4. UniÃ£o entre 2 conjuntos\n");
+        printf("5. IntersecÃ§Ã£o entre 2 conjuntos\n");
+        printf("6. Mostrar um conjunto, dado o seu Ã­ndice\n");
+        printf("7. Mostrar todos os conjuntos\n");
+        printf("8. Busca por um valor\n");
+        printf("9. Sair\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
+
+        switch (opcao)
+        {
+        case 1:
+            //criar novo conjunto
+            void criarNovoConjunto(int pMatriz[MAXLIN][MAXCOL]);
+            printf("\nHÃ¡ %d conjunto(s) registrado(s).\n", contador);
+            break;
+        case 2:
+            // Implementar 
+            break;
+        case 3:
+            // Implementar 
+            break;
+        case 4:
+            // Implementar 
+            break;
+        case 5:
+            // Implementar 
+            break;
+        case 6:
+            // Implementar 
+            break;
+        case 7:
+            // implementar
+            break;
+        case 8:
+           // implementar
+           break;
+        case 9:
+            printf("Encerrando o programa...\n");
+            break;
+        default:
+            printf("OpÃ§Ã£o invalida. Escolha uma opÃ§Ã£o valida.\n");
+            break;
+        }
+    } while (opcao != 9);
+
+    return 0;
+}
+
+void clearScreen()
+{
+    const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
+    write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
+}
+
+void MostarMatriz(int pMatriz[MAXLIN][MAXCOL])
+{
+    // Imprimir linhas superiores
+    printf("---------- MATRIZ ---------\n\n");
+    for (int c = 0; c < MAXCOL; c++)
+    {
+        printf("-");
+    }
+    printf("+\n");
+
+    // Imprimir elementos da matriz
+    for (int l = 0; l < MAXLIN; l++)
+    {
+        printf("|");
+        for (int c = 0; c < MAXCOL; c++)
+        {
+            printf("%d", pMatriz[l][c]);
+        }
+        printf("|\n");
+    }
+
+    // Imprimir linha inferior
+    printf("+");
+    for (int c = 0; c < MAXCOL; c++)
+    {
+        printf("-");
+    }
+    printf("+\n");
+}
+
+void preencherComZeros(int matriz[MAXLIN][MAXCOL], int linhas, int colunas)
+{
+    int i, j;
+
+    for (i = 0; i < linhas; i++)
+    {
+        for (j = 0; j < colunas; j++)
+        {
+            matriz[i][j] = 0;
+        }
+    }
+}
+
+int buscarValor(int pMatriz[MAXLIN][MAXCOL], int valor)
+{
+    int conjuntosEncontrados = 0;
+
+    for (int l = 0; l < contador; l++)
+    {
+        for (int c = 0; c < MAXCOL; c++)
+        {
+            if (pMatriz[l][c] == valor)
+            {
+                printf("indice do conjunto que contem o valor %d: %d\n", valor, l);
+                conjuntosEncontrados++;
+                break;
+            }
+        }
+    }
+
+    return conjuntosEncontrados;
+}
+
+void criarNovoConjunto(int pMatriz[MAXLIN][MAXCOL])
+{
+    if (contador < MAXLIN)
+    {
+        contador++;
+        printf("Novo conjunto criado com sucesso.\n");
+    }
+    else
+    {
+        printf("Nao eh possivel criar um novo conjunto. Limite maximo de conjuntos atingido.\n");
+    }
+}
+
+void inserirDadosConjunto(int pMatriz[MAXLIN][MAXCOL])
+{
+    int indice;
+    printf("Informe o indice do conjunto (0 a %d) para inserir os dados: ", contador - 1);
+    scanf("%d", &indice);
+
+    if (indice >= 0 && indice < contador)
+    {
+        int proximoIndice = 0;
+        int valor;
+        int quantidadeInserida = 0;
+
+        while (proximoIndice < MAXCOL)
+        {
+            printf("Informe o valor a ser inserido (0 para encerrar): ");
+            scanf("%d", &valor);
+
+            if (valor == 0 || quantidadeInserida == MAXCOL)
+            {
+                break;
+            }
+
+            // Verificar se o valor ja foi inserido previamente
+            int valorRepetido = 0;
+            for (int c = 0; c < proximoIndice; c++)
+            {
+                if (pMatriz[indice][c] == valor)
+                {
+                    valorRepetido = 1;
+                    break;
+                }
+            }
+
+            if (!valorRepetido)
+            {
+                pMatriz[indice][proximoIndice] = valor;
+                proximoIndice++;
+                quantidadeInserida++;
+            }
+            else
+            {
+                printf("Valor ja foi inserido anteriormente. Insira um valor diferente.\n");
+            }
+        }
+
+        printf("Dados inseridos com sucesso no conjunto %d.\n", indice);
+    }
+    else
+    {
+        printf("indice invalido. Insira um indice valido.\n");
+    }
+}
+
+void removerConjunto(int pMatriz[MAXLIN][MAXCOL])
+{
+    int indice;
+    printf("Informe o indice do conjunto (0 a %d) para remover: ", contador - 1);
+    scanf("%d", &indice);
+
+    if (indice >= 0 && indice < contador)
+    {
+        // Mover conjuntos abaixo para cima
+        for (int l = indice; l < contador - 1; l++)
+        {
+            for (int c = 0; c < MAXCOL; c++)
+            {
+                pMatriz[l][c] = pMatriz[l + 1][c];
+            }
+        }
+
+        // Zerar a ultima linha (conjunto removido)
+        for (int c = 0; c < MAXCOL; c++)
+        {
+            pMatriz[contador - 1][c] = 0;
+        }
+
+        contador--;
+        printf("Conjunto removido com sucesso.\n");
+    }
+    else
+    {
+        printf("indice invalido. Insira um indice valido.\n");
+    }
+}
+
+void uniaoConjuntos(int pMatriz[MAXLIN][MAXCOL])
+{
+    int indice1, indice2;
+    printf("Informe os indices dos conjuntos para realizar a uniao:\n");
+    printf("Conjunto 1: ");
+    scanf("%d", &indice1);
+    printf("Conjunto 2: ");
+    scanf("%d", &indice2);
+
+    if (indice1 >= 0 && indice1 < contador && indice2 >= 0 && indice2 < contador)
+    {
+        // Criar novo conjunto na matriz
+        if (contador < MAXLIN)
+        {
+            contador++;
+            for (int c = 0; c < MAXCOL; c++)
+            {
+                pMatriz[contador - 1][c] = 0;
+            }
+        }
+        else
+        {
+            printf("Nao eh possivel criar um novo conjunto. Limite mï¿½ximo de conjuntos atingido.\n");
+            return;
+        }
+
+        // Realizar a uniao dos conjuntos
+        int novoIndice = contador - 1;
+        for (int c = 0; c < MAXCOL; c++)
+        {
+            pMatriz[novoIndice][c] = pMatriz[indice1][c] | pMatriz[indice2][c];
+        }
+
+        printf("Uniao realizada com sucesso. Novo conjunto criado no indice %d.\n", novoIndice);
+    }
+    else
+    {
+        printf("indices invalidos. Insira indices validos.\n");
+    }
+}
