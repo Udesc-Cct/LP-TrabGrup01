@@ -8,12 +8,12 @@ void MostarMatriz(int pMatriz[M][N]);
 void menu();
 int seq_search( int m[], int n, int chave );
 void inserir( int m[M][N], int conj);
-void remover( int m[M][N], int rem );
-void unir( int m[M][N], int conj1, int conj2, int unidos);
-void interseccao( int m[M][N], int conj1, int conj2, int interseccao );
+void remover_conj( int m[M][N], int rem );
+void unir_conj( int m[M][N], int conj1, int conj2, int unidos);
+void interseccao_conj( int m[M][N], int conj1, int conj2, int interseccao );
 void mostra_um_conj( int m[] );
 void mostra_conj ( int m[M][N] ,int count );
-void busca_val ( int m[M][N], int valor, int limite );
+void busca_valor_conj ( int m[M][N], int valor, int limite );
 void MostrarMatriz(int pMatriz[M][N]);
 
 int main()
@@ -75,7 +75,7 @@ int main()
                 printf("Qual conjunto deseja remover? ");
                 int rem;
                 scanf("%i", &rem);
-                remover( m, rem );
+                remover_conj( m, rem );
                 count--;
                 //system( "pause" );
                 break;
@@ -108,7 +108,7 @@ int main()
 
                 count++;
 
-                unir( m, conj1, conj2, count-1);
+                unir_conj( m, conj1, conj2, count-1);
                 //system( "pause" );
                 break;
 
@@ -140,7 +140,7 @@ int main()
 
                 count++;
 
-                interseccao( m, conj1, conj2, count-1 );
+                interseccao_conj( m, conj1, conj2, count-1 );
                 break;
             case 6:
                 if( count == 0 )
@@ -182,7 +182,7 @@ int main()
                 {
                     printf ("Digite o valor a ser buscado: ");
                     scanf ("%i", &key);
-                    busca_val (m, key, count);
+                    busca_valor_conj (m, key, count);
                     system( "pause" );
                     break;
                 }
@@ -266,7 +266,7 @@ void inserir( int m[M][N], int conj )
         printf("Limite do conjunto ultrapassado");
 }
 
-void remover( int m[M][N], int rem )
+void remover_conj( int m[M][N], int rem )
 {
     int i;
     for( i = 0; i < N && m[rem][i]; i++) // Zerar a linha removida
@@ -282,7 +282,7 @@ void remover( int m[M][N], int rem )
             m[i][j] = 0;
 }
 
-void unir( int m[M][N], int conj1, int conj2, int unidos)
+void unir_conj( int m[M][N], int conj1, int conj2, int unidos)
 {
     int i, count = 0;
     for( i = 0; m[conj1][i]; i++ ) // Quantidade de termos do primeiro conjunto.
@@ -308,7 +308,7 @@ void unir( int m[M][N], int conj1, int conj2, int unidos)
     }
 }
 
-void interseccao( int m[M][N], int conj1, int conj2, int interseccao )
+void interseccao_conj( int m[M][N], int conj1, int conj2, int interseccao )
 {
     int i, j = 0, count;
     for( count = 0; m[conj2][count]; count++ ) ; // Ver ate onde vai o segundo conjunto.
@@ -339,7 +339,7 @@ void mostra_conj( int m[M][N] , int count ) {
     }
 }
 
-void busca_val ( int m[M][N], int valor, int limite ) {
+void busca_valor_conj ( int m[M][N], int valor, int limite ) {
     int v[limite];
     int i, j, k = 0;
     printf("O valor foi encontrado nos conjuntos: ");
